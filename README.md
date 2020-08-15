@@ -11,7 +11,7 @@
 ```
 sudo docker import wildfire_janus_amd64.tar wildfire_janus
 ```
-> arm镜像导入对应的arm镜像
+> arm服务器请导入对应的arm镜像
 
 ## 修改配置
 下载```janus_config```到服务器。修改```janus.transport.mqtt.jcfg```
@@ -38,6 +38,7 @@ im_host 要使用专业版的授权域名，client_id为了安全，请使用一
 IM服务配置文件中修改音视频服务的client_id、subscribe_topic和publish_topic。然后启动IM服务。
 
 ## 启动媒体服务
+IM服务启动之后才可以启动媒体服务。请使用下面命令启动：
 ```
 sudo docker run -it -e DOCKER_IP=192.168.3.102 --name wf_janus_server --net host -v PATH_TO_janus_config:/var/janus/janus/etc/janus wildfire_janus
 ```
@@ -45,3 +46,9 @@ sudo docker run -it -e DOCKER_IP=192.168.3.102 --name wf_janus_server --net host
 
 ## 客户端
 确保客户端能够正常运行，能够收发消息。替换音视频高级版的SDK，测试音视频通话。
+
+## 水平扩展
+客户部署多个媒体服务来水平扩展媒体服务。当用户发起音视频通话时，IM服务会hash分配媒体服务。
+
+## 鸣谢
+感谢[janus](https://github.com/meetecho/janus-gateway)提供如此好的开源产品。
