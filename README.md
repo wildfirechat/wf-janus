@@ -40,7 +40,7 @@ IM服务配置文件中修改音视频服务的client_id、subscribe_topic和pub
 ## 启动媒体服务
 IM服务启动之后才可以启动媒体服务。请使用下面命令启动：
 ```
-sudo docker run -it -e DOCKER_IP=192.168.3.102 --name wf_janus_server --net host -v PATH_TO_janus_config:/var/janus/janus/etc/janus wildfire_janus
+sudo docker run -it -e DOCKER_IP=192.168.3.102 --name wf_janus_server --net host -v PATH_TO_janus_config:/var/janus/janus/etc/janus -v PATH_TO_RECORDS_FOLDER:/var/janus/records wildfire_janus
 ```
 注意```DOCKER_IP```为服务器的外网IP，```PATH_TO_janus_config```为配置文件的路径。
 
