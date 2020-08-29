@@ -40,15 +40,26 @@ IM服务配置文件中修改音视频服务的client_id、subscribe_topic和pub
 ## 启动媒体服务
 IM服务启动之后才可以启动媒体服务。请使用下面命令启动：
 ```
-sudo docker run -it -e DOCKER_IP=192.168.3.102 --name wf_janus_server --net host -v PATH_TO_janus_config:/var/janus/janus/etc/janus -v PATH_TO_RECORDS_FOLDER:/var/janus/records wildfire_janus
+sudo docker run -it -e DOCKER_IP=192.168.3.102 --name wf_janus_server --net host -v PATH_TO_janus_config:/var/janus/janus/etc/janus -v PATH_TO_RECORDS_FOLDER:/opt/janus/share/janus/recordings wildfire_janus
 ```
-注意```DOCKER_IP```为服务器的外网IP，```PATH_TO_janus_config```为配置文件的路径。
+注意```DOCKER_IP```为服务器的外网IP，```PATH_TO_janus_config```为配置文件的路径，```PATH_TO_RECORDS_FOLDER```为录制文件保存目录。
 
 ## 客户端
 确保客户端能够正常运行，能够收发消息。替换音视频高级版的SDK，测试音视频通话。
 
 ## 水平扩展
 客户部署多个媒体服务来水平扩展媒体服务。当用户发起音视频通话时，IM服务会hash分配媒体服务。
+
+## 录制文件的处理
+录制文件的格式为```mjr```，这种格式是直接把RTP信息写入文件，这样就不会对服务器造成任何的计算压力。录制后需要进行后期处理才能够播放，下载[janus-pp-rec](./janus-pp-rec)，然后执行：
+```
+./janus-pp-rec  videoroom-${roomId}-${timestamp}-audio.mjr videoroom-${roomId}-${timestamp}.opus
+./janus-pp-rec  videoroom-${roomId}-${timestamp}-video.mjr videoroom-${roomId}-${timestamp}.mp4
+```
+至此就转为常见格式了，再使用ffmepg把音频和视频结合成一个文件。janus只能支持这种格式，无法支持别的格式。
+
+详情请参考[janus录制](https://janus.conf.meetecho.com/docs/recordings.html)
+
 
 ## 鸣谢
 感谢[janus](https://github.com/meetecho/janus-gateway)提供如此好的开源产品。
