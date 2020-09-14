@@ -9,7 +9,7 @@
 
 镜像下载之后通过下属命令导入镜像:
 ```
-sudo docker import wildfire_janus_amd64.tar wildfire_janus
+sudo docker load -i wildfire_janus_amd64.tar
 ```
 > arm服务器请导入对应的arm镜像
 
@@ -42,7 +42,7 @@ IM服务启动之后才可以启动媒体服务。请使用下面命令启动：
 ```
 sudo docker run -it -e DOCKER_IP=192.168.3.102 --name wf_janus_server --net host -v PATH_TO_janus_config:/var/janus/janus/etc/janus -v PATH_TO_RECORDS_FOLDER:/opt/janus/share/janus/recordings wildfire_janus
 ```
-注意```DOCKER_IP```为服务器的外网IP，```PATH_TO_janus_config```为配置文件的路径，```PATH_TO_RECORDS_FOLDER```为录制文件保存目录。
+注意```DOCKER_IP```为服务器的外网IP，```PATH_TO_janus_config```为配置文件的路径，```PATH_TO_RECORDS_FOLDER```为录制文件保存目录，这三个占位符需要修改为具体的值，其他的不用修改。
 
 ## 客户端
 确保客户端能够正常运行，能够收发消息。替换音视频高级版的SDK，测试音视频通话。
