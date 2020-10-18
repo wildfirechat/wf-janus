@@ -22,8 +22,23 @@ general: {
   client_id = "guest"				# Client identifier
   subscribe_topic = "to-janus"		# Topic for incoming messages
   publish_topic = "from-janus"		# Topic for outgoing messages
+  ...
+}
+
+media: {
+  ...
+	rtp_port_range = "20000-40000"
+  ...
+}
+
+nat: {
+	...
+	ice_lite = true
+  ...
+}
 
 ```
+
 
 修改```janus.plugin.videoroom.jcfg```
 ```
@@ -33,6 +48,7 @@ string_ids = true
 
 im_host 要使用专业版的授权域名，client_id为了安全，请使用一个随机的uuid，client_id和subscribe_topic和publish_topic要和IM服务配置中的值对应。
 
+rtp_port_range 为媒体流使用的UDP端口范围，端口至少1万个，需要确保服务器防火墙和安全组放开权限，需要确保客户端网络防火墙放开权限。
 
 ## 修改IM服务
 IM服务配置文件中修改音视频服务的client_id、subscribe_topic和publish_topic。然后启动IM服务。
