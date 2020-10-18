@@ -27,13 +27,13 @@ general: {
 
 media: {
   ...
-	rtp_port_range = "20000-40000"
+  rtp_port_range = "20000-40000"
   ...
 }
 
 nat: {
-	...
-	ice_lite = true
+  ...
+  ice_lite = true
   ...
   # 多网卡时需要打开并指定网卡
   #ice_enforce_list = "eth0"
