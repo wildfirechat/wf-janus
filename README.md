@@ -27,13 +27,16 @@ general: {
 
 media: {
   ...
-	rtp_port_range = "20000-40000"
+  rtp_port_range = "20000-40000"
   ...
 }
 
 nat: {
-	...
-	ice_lite = true
+  ...
+  ice_lite = true
+  ...
+  # 多网卡时需要打开并指定网卡
+  #ice_enforce_list = "eth0"
   ...
 }
 
@@ -48,7 +51,9 @@ string_ids = true
 
 im_host 要使用专业版的授权域名，client_id为了安全，请使用一个随机的uuid，client_id和subscribe_topic和publish_topic要和IM服务配置中的值对应。
 
-rtp_port_range 为媒体流使用的UDP端口范围，端口至少1万个，需要确保服务器防火墙和安全组放开权限，需要确保客户端网络防火墙放开权限。
+rtp_port_range 为媒体流使用的UDP端口范围，端口至少5000个。UDP端口范围默认是20000-40000，如果修改端口范围请确保在这个区间内。需要确保服务器防火墙和安全组放开权限，需要确保客户端网络防火墙放开权限。
+
+如果宿主机上有多于一个网卡，需要指定使用那个网卡，请打开配置文件中的```ice_enforce_list```配置，设置上外网IP所对应的网卡。
 
 ## 修改IM服务
 IM服务配置文件中修改音视频服务的client_id、subscribe_topic和publish_topic。然后启动IM服务。
