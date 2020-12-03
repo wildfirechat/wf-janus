@@ -61,9 +61,13 @@ IM服务配置文件中修改音视频服务的client_id、subscribe_topic和pub
 ## 启动媒体服务
 IM服务启动之后才可以启动媒体服务。请使用下面命令启动：
 ```
-sudo docker run -it -e DOCKER_IP=192.168.3.102 --name wf_janus_server --net host -v PATH_TO_janus_config:/var/janus/janus/etc/janus -v PATH_TO_RECORDS_FOLDER:/opt/janus/share/janus/recordings wildfire_janus
+sudo docker run -it -e DOCKER_IP=YOUR_DOCKER_IP --name wf_janus_server --net host -v PATH_TO_janus_config:/var/janus/janus/etc/janus -v PATH_TO_RECORDS_FOLDER:/opt/janus/share/janus/recordings wildfire_janus
 ```
-注意```DOCKER_IP```为服务器的外网IP，```PATH_TO_janus_config```为配置文件的路径，```PATH_TO_RECORDS_FOLDER```为录制文件保存目录，**这三个占位符本身需要修改为具体的值，而不是修改```=或:```后面那部分，其他的不用修改**, 比如```sudo docker run -it -e DOCKER_IP=46.8.147.195 --name wfc_janus_server --net host -v /Users/userName/wf-janus/config:/java_project/wf-janus/janus_config -v /Users/userName/records_folder:/java_project/wf-janus/records_folder wildfire_janus```。
+注意```YOUR_DOCKER_IP```为服务器的外网IP，```PATH_TO_janus_config```为配置文件的路径，```PATH_TO_RECORDS_FOLDER```为录制文件保存目录，**这三个占位符本身需要修改为具体的值，而不是修改```:```后面那部分，其他的不用修改**, 下面是修改后的命令示例:
+
+```
+sudo docker run -it -e DOCKER_IP=46.8.147.195 --name wfc_janus_server --net host -v /Users/userName/wf-janus/config:/var/janus/janus/etc/janus -v /Users/userName/records_folder:/opt/janus/share/janus/recordings wildfire_janus
+```
 
 > docker 挂载主机目录，请参考 [docker run -v](https://www.cnblogs.com/starfish29/p/10653960.html), [docker volums](https://docs.docker.com/storage/volumes/)
 
