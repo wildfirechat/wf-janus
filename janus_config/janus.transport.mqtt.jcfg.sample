@@ -1,17 +1,17 @@
 # Configuration of the MQTT additional transport for the Janus API.
 general: {
-	enabled = false						# Whether the support must be enabled
+	enabled = true						# Whether the support must be enabled
 	#events = true						# Whether to notify event handlers about transport events (default=true)
 	json = "indented"						# Whether the JSON messages should be indented (default),
 										# plain (no indentation) or compact (no indentation and no spaces)
-        im_host = "imdev.wildfirechat.cn"
+	im_host = "imdev.wildfirechat.cn" # Wildfire IM server host
+	im_port = 80  # Wildfire IM server http port
+
 	url = "tcp://localhost:1883"		# The connection URL of the MQTT broker: if you want
 										# to use SSL, make sure you type ssl:// instead of tcp://,
 										# and that you configure the SSL settings below
 	#mqtt_version = "3.1.1"				# Protocol version. Available values: 3.1, 3.1.1 (default), 5.
-	#client_id = "guest"				# Client identifier
-	#username = "guest"					# Username to use to authenticate, if needed
-	#password = "guest"					# Password to use to authenticate, if needed
+	client_id = "guest"				# Client identifier
 	#keep_alive_interval = 20			# Keep connection for N seconds
 	#cleansession = 0					# Clean session flag
 	#disconnect_timeout = 100			# Milliseconds to wait before destroying client

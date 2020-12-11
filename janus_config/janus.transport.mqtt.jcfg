@@ -4,7 +4,9 @@ general: {
 	#events = true						# Whether to notify event handlers about transport events (default=true)
 	json = "indented"						# Whether the JSON messages should be indented (default),
 										# plain (no indentation) or compact (no indentation and no spaces)
-  im_host = "imdev.wildfirechat.cn"  # Wildfire IM server host
+	im_host = "imdev.wildfirechat.cn" # Wildfire IM server host
+	im_port = 80  # Wildfire IM server http port
+
 	url = "tcp://localhost:1883"		# The connection URL of the MQTT broker: if you want
 										# to use SSL, make sure you type ssl:// instead of tcp://,
 										# and that you configure the SSL settings below
