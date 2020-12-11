@@ -19,7 +19,8 @@ sudo docker load -i wildfire_janus_amd64.tar
 general: {
   enabled = true            # Whether the support must be enabled
   im_host = "imdev.wildfirechat.cn"  # Wildfire IM server host
-  client_id = "guest"				# Client identifier
+  im_port = 80  # Wildfire IM server http port。请保持不变，仅当改动过客户端端口时修改
+  client_id = "conference_server_1"				# Client identifier
   subscribe_topic = "to-janus"		# Topic for incoming messages，需要和im server配置里面的 conference.to_topic 一致
   publish_topic = "from-janus"		# Topic for outgoing messages，需要和im server配置里面的 conference.from_topic 一致
   ...
