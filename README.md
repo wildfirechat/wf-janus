@@ -14,47 +14,46 @@ sudo docker load -i wildfire_janus_amd64.tar
 > arm服务器请导入对应的arm镜像
 
 ## 修改配置
-下载```janus_config```到服务器。修改```janus.transport.mqtt.jcfg```
-```
-general: {
-  enabled = true            # Whether the support must be enabled
-  im_host = "imdev.wildfirechat.cn"  # Wildfire IM server host
-  im_port = 80  # Wildfire IM server http port。请保持不变，仅当改动过客户端端口时修改
-  client_id = "conference_server_1"				# Client identifier
-  subscribe_topic = "to-janus"		# Topic for incoming messages，需要和im server配置里面的 conference.to_topic 一致
-  publish_topic = "from-janus"		# Topic for outgoing messages，需要和im server配置里面的 conference.from_topic 一致
-  ...
-}
+下载```janus_config```到服务器。
+1. 修改```janus.transport.mqtt.jcfg```
+    ```
+    general: {
+      enabled = true            # Whether the support must be enabled
+      im_host = "imdev.wildfirechat.cn"  # Wildfire IM server host
+      im_port = 80  # Wildfire IM server http port。请保持不变，仅当改动过客户端端口时修改
+      client_id = "conference_server_1"				# Client identifier
+      subscribe_topic = "to-janus"		# Topic for incoming messages，需要和im server配置里面的 conference.to_topic 一致
+      publish_topic = "from-janus"		# Topic for outgoing messages，需要和im server配置里面的 conference.from_topic 一致
+      ...
+    }
+    ```
+    >im_host 要使用专业版的授权域名，client_id为了安全，请使用一个随机的uuid，client_id和subscribe_topic和publish_topic要和IM服务配置中的值对应。
+2. 修改```janus.jcfg```
+    ```
+    media: {
+      ...
+      rtp_port_range = "20000-40000"
+      ...
+    }
 
-media: {
-  ...
-  rtp_port_range = "20000-40000"
-  ...
-}
+    nat: {
+      ...
+      ice_lite = true
+      ...
+      # 多网卡时需要打开并指定网卡
+      #ice_enforce_list = "eth0"
+      ...
+    }
 
-nat: {
-  ...
-  ice_lite = true
-  ...
-  # 多网卡时需要打开并指定网卡
-  #ice_enforce_list = "eth0"
-  ...
-}
+    ```
+    > rtp_port_range 为媒体流使用的UDP端口范围，端口至少5000个。UDP端口范围默认是20000-40000，如果修改端口范围请确保在这个区间内。需要确保服务器防火墙和安全组放开权限，需要确保客户端网络防火墙放开权限。
 
-```
-
-
-修改```janus.plugin.videoroom.jcfg```
-```
-string_ids = true
-
-```
-
-im_host 要使用专业版的授权域名，client_id为了安全，请使用一个随机的uuid，client_id和subscribe_topic和publish_topic要和IM服务配置中的值对应。
-
-rtp_port_range 为媒体流使用的UDP端口范围，端口至少5000个。UDP端口范围默认是20000-40000，如果修改端口范围请确保在这个区间内。需要确保服务器防火墙和安全组放开权限，需要确保客户端网络防火墙放开权限。
-
-如果宿主机上有多于一个网卡，需要指定使用那个网卡，请打开配置文件中的```ice_enforce_list```配置，设置上外网IP所对应的网卡。
+3. 修改```janus.plugin.videoroom.jcfg```
+    ```
+    string_ids = true
+    
+    ```
+    > 如果宿主机上有多于一个网卡，需要指定使用那个网卡，请打开配置文件中的```ice_enforce_list```配置，设置上外网IP所对应的网卡。
 
 ## 修改IM服务
 IM服务配置文件中修改音视频服务的client_id、subscribe_topic和publish_topic。然后启动IM服务。
