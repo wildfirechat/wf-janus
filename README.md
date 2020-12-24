@@ -48,12 +48,13 @@ sudo docker load -i wildfire_janus_amd64.tar
     ```
     > rtp_port_range 为媒体流使用的UDP端口范围，端口至少5000个。UDP端口范围默认是20000-40000，如果修改端口范围请确保在这个区间内。需要确保服务器防火墙和安全组放开权限，需要确保客户端网络防火墙放开权限。
 
+    > 如果宿主机上有多于一个网卡，需要指定使用那个网卡，请打开配置文件中的```ice_enforce_list```配置，设置上外网IP所对应的网卡。
+
 3. 修改```janus.plugin.videoroom.jcfg```
     ```
     string_ids = true
-    
+
     ```
-    > 如果宿主机上有多于一个网卡，需要指定使用那个网卡，请打开配置文件中的```ice_enforce_list```配置，设置上外网IP所对应的网卡。
 
 ## 修改IM服务
 IM服务配置文件中修改音视频服务的client_id、subscribe_topic和publish_topic。然后启动IM服务。
