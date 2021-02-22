@@ -8,7 +8,7 @@
 由于使用的是SFU架构，所有流量都经过媒体服务，对带宽的要求非常高。如果使用固定带宽，价格会非常高昂。建议使用按照流量计费，大部分云服务器都能达到200Mbps，可以支持较大的通话容量。按量计费相比按带宽计费，费用会节省更多。
 
 ## 导入docker镜像
-仅支持docker方式，x64镜像在[这里](https://static.wildfirechat.cn/wildfire_janus_amd64.tar)，下载完之后检查[md5](https://static.wildfirechat.cn/wildfire_janus_amd64.md5)；arm64镜像在[这里](https://static.wildfirechat.cn/wildfire_janus_arm64.tar)，下载完之后检查[md5](https://static.wildfirechat.cn/wildfire_janus_arm64.md5)
+仅支持docker方式，x64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64.md5)
 
 镜像下载之后通过下属命令导入镜像:
 ```
@@ -112,7 +112,7 @@ sudo docker run -it -e DOCKER_IP=46.8.147.195 --name wfc_janus_server --net host
 ### UDP端口连通性检查
 Janus服务处于公网，客户端无论处于任何NAT之内都应该可以连接。当出现连接超时的错误时，很有可能是Janus与客户端之间UDP端口无法互通。可以用[netcat](https://www.baidu.com/s?wd=netcat)来检查他们之间的连通性。
 1. 环境准备: 需要在客户端网络之内准备一台linux或者mac作为测试客户端；在测试客户端和janus服务器上分别安装```netcat```，已知Ubuntu和mac已经预安装了，其它系统可以百度怎么安装。
-2. 在Janus服务上，执行命令 ```netcat -ul 30000```。3000为监听UDP端口，需要注意Janus服务配置的端口范围之内。
+2. 在Janus服务上，执行命令 ```netcat -ulvp 30000```。3000为监听UDP端口，需要注意Janus服务配置的端口范围之内。
 3. 在客户端上执行命令 ```netcat -u YOUR_PUBLIC_IP 30000```。```YOUR_PUBLIC_IP```是Janus服务的公网IP，也是启动命令内的参数。
 4. 在客户端输入内容，检查服务器端是否收到对应内容。
 5. 服务器端收到后，在服务器端窗口输入内容，检查客户端是否收到对应内容。
