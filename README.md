@@ -1,5 +1,5 @@
 # 野火音视频高级版媒体服务
-野火音视频高级版媒体服务，基于[janus](https://github.com/meetecho/janus-gateway)二次开发而来，开发仅限于与野火IM对接，没有做任何功能的修改。使用方法如下：
+野火音视频高级版媒体服务，基于[janus](https://github.com/meetecho/janus-gateway)二次开发而来，开发仅限于与野火IM对接，修改开源代码在[这里](https://github.com/heavyrain2012/janus-gateway)，没有做任何功能的修改。使用方法如下：
 
 ## 高级版的特点
 高级版是通过云服务器中转，通信质量更有保障，详情请参考[链接](https://docs.wildfirechat.cn/blogs/野火音视频简介.html)
@@ -8,7 +8,7 @@
 由于使用的是SFU架构，所有流量都经过媒体服务，对带宽的要求非常高。如果使用固定带宽，价格会非常高昂。建议使用按照流量计费，大部分云服务器都能达到200Mbps，可以支持较大的通话容量。按量计费相比按带宽计费，费用会节省更多。
 
 ## 导入docker镜像
-仅支持docker方式，x64镜像在[这里](https://static.wildfirechat.cn/wildfire_janus_amd64.tar)，下载完之后检查[md5](https://static.wildfirechat.cn/wildfire_janus_amd64.md5)；arm64镜像在[这里](https://static.wildfirechat.cn/wildfire_janus_arm64.tar)，下载完之后检查[md5](https://static.wildfirechat.cn/wildfire_janus_arm64.md5)
+仅支持docker方式，x64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64.md5)
 
 镜像下载之后通过下属命令导入镜像:
 ```
@@ -117,13 +117,13 @@ sudo docker run -d -e DOCKER_IP=YOUR_PUBLIC_IP --name wf_janus_server --net host
 ## 问题排查
 ### UDP端口连通性检查
 Janus服务处于公网，客户端无论处于任何NAT之内都应该可以连接。当出现连接超时的错误时，很有可能是Janus与客户端之间UDP端口无法互通。可以用[netcat](https://www.baidu.com/s?wd=netcat)来检查他们之间的连通性。
-1. 环境准备: 需要在客户端网络之内准备一台linux或者mac作为测试客户端；在测试客户端和janus服务器上分别安装```netcat```，已知Ubuntu和mac已经预安装了，其它系统可以百度怎么安装。
-2. 在Janus服务上，执行命令 ```netcat -ul 30000```。3000为监听UDP端口，需要注意Janus服务配置的端口范围之内。
-3. 在客户端上执行命令 ```netcat -u YOUR_PUBLIC_IP 30000```。```YOUR_PUBLIC_IP```是Janus服务的公网IP，也是启动命令内的参数。
+1. 环境准备: 需要在客户端网络之内准备一台linux或者mac作为测试客户端；在测试客户端和janus服务器上分别安装```netcat```，已知Ubuntu和mac已经预安装了，centos可以用命令```yum install -y nc```来安装。其它系统可以百度怎么安装。
+2. 在Janus服务上，执行命令 ```nc -ulvp 30000```。30000为监听UDP端口，需要注意Janus服务配置的端口范围之内。
+3. 在客户端上执行命令 ```nc -u YOUR_PUBLIC_IP 30000```。```YOUR_PUBLIC_IP```是Janus服务的公网IP，也是启动命令内的参数。
 4. 在客户端输入内容，检查服务器端是否收到对应内容。
 5. 服务器端收到后，在服务器端窗口输入内容，检查客户端是否收到对应内容。
 
-如果4、5失败说明网络之间不通，需要运维检查网络环境。如果成功，客户端需要断开，再重试几次。再更换服务器端端口，重复测试几次。
+如果4、5失败说明网络之间不通，需要运维检查网络环境。如果成功，客户端需要断开，再重试几次。再更换服务器端端口，重复测试几次。UDP检查方案来源于[这里](https://docs.azure.cn/zh-cn/articles/azure-operations-guide/virtual-network/aog-virtual-network-using-netcat-check-the-connectivity#测试-udp-端口连通性)。
 
 ## 鸣谢
 本产品基于[janus](https://github.com/meetecho/janus-gateway)二次开发而来，十分感谢他们的奉献！
