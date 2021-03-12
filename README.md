@@ -76,6 +76,12 @@ sudo docker run -it -e DOCKER_IP=YOUR_PUBLIC_IP --name wf_janus_server --net hos
 sudo docker run -it -e DOCKER_IP=46.8.147.195 --name wfc_janus_server --net host -v /Users/userName/wf-janus/config:/var/janus/janus/etc/janus -v /Users/userName/records_folder:/opt/janus/share/janus/recordings wildfire_janus
 ```
 
+上线时需要deamon方式运行，且设置为自动重启。命令如下：
+```
+sudo docker run -d -e DOCKER_IP=YOUR_PUBLIC_IP --name wf_janus_server --net host -v PATH_TO_janus_config:/var/janus/janus/etc/janus -v PATH_TO_RECORDS_FOLDER:/opt/janus/share/janus/recordings --restart=always wildfire_janus
+```
+
+> --restart=always 一定要设置上，因为当出现不可逆错误时，janus服务会退出，这样自动重启就能恢复。
 > docker 挂载主机目录，请参考 [docker run -v](https://www.cnblogs.com/starfish29/p/10653960.html), [docker volums](https://docs.docker.com/storage/volumes/)
 
 ## 客户端
