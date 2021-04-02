@@ -30,7 +30,7 @@ sudo docker load -i wildfire_janus_amd64.tar
       ...
     }
     ```
-    >im_host 要使用专业版的授权域名，client_id为了安全，请使用一个随机的uuid，client_id和subscribe_topic和publish_topic要和IM服务配置中的值对应。
+    >im_host 要使用专业版的授权域名，client_id为了安全，请使用一个随机的uuid，如果部署多台，需要确保每台都的client_id都是唯一的，client_id和subscribe_topic和publish_topic要和IM服务配置中的值对应。
 2. 修改```janus.jcfg```
     ```
     media: {
@@ -103,6 +103,8 @@ sudo docker run -d -e DOCKER_IP=YOUR_PUBLIC_IP --name wf_janus_server --net host
 
 ## 水平扩展
 通过容量计算方法可以看出，受限于服务器的带宽，单台只能支持有限的通话容量。可以部署多台媒体服务来水平扩展媒体服务。当用户发起音视频通话时，IM服务会Hash分配会议到某台媒体服务。因此可以看出总的容量可以随着媒体服务器的增加而增加，但单个会议的最大容量还是受限于单台服务器的最大带宽。
+
+扩展时需要确保每台服务的```client_id```不能重复，请同步修改janus服务的配置文件和IM服务的配置文件，确保janus配置中```client_id```是唯一的，且在IM配置文件中janus ```client_id```列表中。
 
 ## 录制文件的处理
 录制文件的格式为```mjr```，这种格式是直接把RTP信息写入文件，这样就不会对服务器造成任何的计算压力。录制后需要进行后期处理才能够播放，下载[janus-pp-rec](./janus-pp-rec)，然后执行：
