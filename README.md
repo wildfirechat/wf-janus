@@ -60,7 +60,7 @@ sudo docker load -i wildfire_janus_amd64.tar
     ```
 
 ## 防火墙和安全组设置
-服务器需要开放TCP 3478的入访权限、UDP指定端口范围的入访权限（默认是20000-40000）。服务器需要去连接IM，需要开通到IM服务的80/1883端口。
+服务器需要开放UDP指定端口范围的入访权限（默认是20000-40000）。服务器需要去连接IM，需要开通到IM服务的80/1883端口。
 
 ## 修改IM服务
 IM服务配置文件中修改音视频服务的client_id、subscribe_topic和publish_topic。然后启动IM服务。
