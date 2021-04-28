@@ -6,6 +6,7 @@ general: {
 										# plain (no indentation) or compact (no indentation and no spaces)
 	im_host = "imdev.wildfirechat.cn" # Wildfire IM server host
 	im_port = 80  # Wildfire IM server http port
+	mqtt_port = 1883  # Wildfire IM server mqtt port
 
 	url = "tcp://localhost:1883"		# The connection URL of the MQTT broker: if you want
 										# to use SSL, make sure you type ssl:// instead of tcp://,
