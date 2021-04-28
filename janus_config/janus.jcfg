@@ -172,9 +172,11 @@ general: {
 # Finally, by default NIST P-256 certificates are generated (see #1997),
 # but RSA generation is still supported if you set 'rsa_private_key' to 'true'.
 certificates: {
-	#cert_pem = "/path/to/certificate.pem"
-	#cert_key = "/path/to/key.pem"
-	#cert_pwd = "secretpassphrase"
+				# 这里证书是野火提供的，为了更好的安全性，可以自己来生成证书。
+				# 生成证书请按照配置文件目录下的cert.md说明。
+        cert_pem = "/var/janus/janus/etc/janus/cacert.pem"
+        cert_key = "/var/janus/janus/etc/janus/privkey.pem"
+        cert_pwd = "123456"
 	#dtls_accept_selfsigned = false
 	#dtls_ciphers = "your-desired-openssl-ciphers"
 	#rsa_private_key = false
