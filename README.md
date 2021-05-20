@@ -2,7 +2,7 @@
 野火音视频高级版媒体服务，基于[janus](https://github.com/meetecho/janus-gateway)二次开发而来，开发仅限于与野火IM对接，修改开源代码在[这里](https://github.com/heavyrain2012/janus-gateway)，没有做任何功能的修改。使用方法如下：
 
 ## 高级版的特点
-高级版是通过云服务器中转，通信质量更有保障，详情请参考[链接](https://docs.wildfirechat.cn/blogs/野火音视频简介.html)
+高级版是通过云服务器中转，通信质量更有保障，详情请参考[链接](https://docs.wildfirechat.cn/blogs/野火音视频简介.html)，另外支持超级会议模式，支持无限大人数参与，请参考[链接](https://docs.wildfirechat.cn/blogs/野火音视频之超级会议.html)。
 
 ## 服务器的选用
 由于使用的是SFU架构，所有流量都经过媒体服务，对带宽的要求非常高。如果使用固定带宽，价格会非常高昂。建议使用按照流量计费，大部分云服务器都能达到200Mbps，可以支持较大的通话容量。按量计费相比按带宽计费，费用会节省更多。
@@ -63,7 +63,12 @@ sudo docker load -i wildfire_janus_amd64.tar
 服务器需要开放UDP指定端口范围的入访权限（默认是20000-40000）。服务器需要去连接IM，需要开通到IM服务的80/1883端口。
 
 ## 修改IM服务
-IM服务配置文件中修改音视频服务的client_id、subscribe_topic和publish_topic。然后启动IM服务。
+IM服务配置文件中修改音视频服务的client_id列表、signal_server_address、subscribe_topic和publish_topic。其中：
+1. client_id列表要包含所有janus服务的clientId，为了以后扩展方便，预先写入多个id；
+2. signal_server_address填写当前IM服务的内网地址，这样janus服务就与IM服务内网通信；
+3. subscribe_topic和publish_topic要和janus配置的topic保持一致；
+
+修改配置后重新启动IM服务。
 
 ## 启动媒体服务
 IM服务启动之后才可以启动媒体服务。请使用下面命令启动：
@@ -102,7 +107,7 @@ sudo docker run -d -e DOCKER_IP=YOUR_PUBLIC_IP --name wf_janus_server --net host
 
 
 ## 水平扩展
-通过容量计算方法可以看出，受限于服务器的带宽，单台只能支持有限的通话容量。可以部署多台媒体服务来水平扩展媒体服务。当用户发起音视频通话时，IM服务会Hash分配会议到某台媒体服务。因此可以看出总的容量可以随着媒体服务器的增加而增加，但单个会议的最大容量还是受限于单台服务器的最大带宽。
+通过容量计算方法可以看出，受限于服务器的带宽，单台只能支持有限的通话容量。可以部署多台媒体服务来水平扩展媒体服务。当用户发起音视频通话时，IM服务会Hash分配会议到某台媒体服务。因此可以看出总的容量可以随着媒体服务器的增加而增加，但单个会议的最大容量还是受限于单台服务器的最大带宽。使用超级会议模式时，会议可以扩展到整个系统中，因此当发起大用户数量的视频会议直播时可以选择超级会议模式。
 
 扩展时需要确保每台服务的```client_id```不能重复，请同步修改janus服务的配置文件和IM服务的配置文件，确保janus配置中```client_id```是唯一的，且在IM配置文件中janus ```client_id```列表中。
 
