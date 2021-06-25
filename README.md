@@ -122,6 +122,8 @@ sudo docker run -d -e DOCKER_IP=YOUR_PUBLIC_IP --name wf_janus_server --net host
 详情请参考[janus录制](https://janus.conf.meetecho.com/docs/recordings.html)
 
 ## 问题排查
+一般情况下，都是服务器端口无法连通引起的，这时需要检查云服务器的安全组和防火墙是否开放了对应的UDP端口。确认过安全组和防火墙后如果还是无法正常使用，请再按照下面说明检查端口是否是通的。
+
 ### UDP端口连通性检查
 Janus服务处于公网，客户端无论处于任何NAT之内都应该可以连接。当出现连接超时的错误时，很有可能是Janus与客户端之间UDP端口无法互通。可以用[netcat](https://www.baidu.com/s?wd=netcat)来检查他们之间的连通性。
 1. 环境准备: 需要在客户端网络之内准备一台linux或者mac作为测试客户端；在测试客户端和janus服务器上分别安装```netcat```，已知Ubuntu和mac已经预安装了，centos可以用命令```yum install -y nc```来安装。其它系统可以百度怎么安装。
