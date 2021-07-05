@@ -122,7 +122,8 @@ sudo docker run -d --privileged=true -e DOCKER_IP=YOUR_PUBLIC_IP --name wf_janus
 详情请参考[janus录制](https://janus.conf.meetecho.com/docs/recordings.html)
 
 ## 问题排查
-一般情况下，都是服务器端口无法连通引起的，这时需要检查云服务器的安全组和防火墙是否开放了对应的UDP端口。确认过安全组和防火墙后如果还是无法正常使用，请再按照下面说明检查端口是否是通的。
+1. 服务器公网IP配置不对，也就是启动命令中的```DOCKER_IP```参数。一定要使用服务器的公网IP地址，不能是域名也不能是内网IP。
+2. 客户端到服务器的连通问题，这时需要检查云服务器的安全组和防火墙是否开放了对应的UDP端口。确认过安全组和防火墙后如果还是无法正常使用，请再按照下面说明检查端口是否是通的。
 
 ### UDP端口连通性检查
 Janus服务处于公网，客户端无论处于任何NAT之内都应该可以连接。当出现连接超时的错误时，很有可能是Janus与客户端之间UDP端口无法互通。可以用[netcat](https://www.baidu.com/s?wd=netcat)来检查他们之间的连通性。
