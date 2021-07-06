@@ -2,7 +2,7 @@
 野火音视频高级版媒体服务，基于[janus](https://github.com/meetecho/janus-gateway)二次开发而来，开发仅限于与野火IM对接，修改开源代码在[这里](https://github.com/heavyrain2012/janus-gateway)，没有做任何功能的修改。使用方法如下：
 
 ## 高级版的特点
-高级版是通过云服务器中转，通信质量更有保障，详情请参考[链接](https://docs.wildfirechat.cn/blogs/野火音视频简介.html)，另外支持超级会议模式，支持无限大人数参与，请参考[链接](https://docs.wildfirechat.cn/blogs/野火音视频之超级会议.html)。
+高级版是通过云服务器中转，通信质量更有保障，详情请参考[链接](https://docs.wildfirechat.cn/blogs/野火音视频简介.html)，另外支持超级会议模式，支持无限人数参与，请参考[链接](https://docs.wildfirechat.cn/blogs/野火音视频之超级会议.html)。
 
 ## 服务器的选用
 由于使用的是SFU架构，所有流量都经过媒体服务，对带宽的要求非常高。如果使用固定带宽，价格会非常高昂。建议使用按照流量计费，大部分云服务器都能达到200Mbps，可以支持较大的通话容量。按量计费相比按带宽计费，费用会节省更多。
