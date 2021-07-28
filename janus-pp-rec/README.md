@@ -12,8 +12,8 @@ conference.record_path /opt/janus/share/janus/recordings
 ## 录制文件的处理
 录制文件的格式为```mjr```，这种格式是直接把RTP信息写入文件，这样就不会对服务器造成任何的计算压力。录制后需要进行后期处理才能够播放，下载janus-pp-rec，然后执行：
 ```
-./janus-pp-rec  videoroom-${roomId}-${timestamp}-audio.mjr videoroom-${roomId}-${timestamp}.opus
-./janus-pp-rec  videoroom-${roomId}-${timestamp}-video.mjr videoroom-${roomId}-${timestamp}.mp4
+./janus-pp-rec  videoroom-${roomId}-user-${userId}-${timestamp}-audio.mjr videoroom-${roomId}-user-${userId}-${timestamp}.opus
+./janus-pp-rec  videoroom-${roomId}-user-${userId}-${timestamp}-video.mjr videoroom-${roomId}-user-${userId}-${timestamp}.mp4
 ```
 至此就转为常见格式了，再使用ffmepg把音频和视频结合成一个文件。janus只能支持这种格式，无法支持别的格式。
 
