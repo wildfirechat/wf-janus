@@ -8,7 +8,9 @@
 由于使用的是SFU架构，所有流量都经过媒体服务，对带宽的要求非常高。如果使用固定带宽，价格会非常高昂。建议使用按照流量计费，大部分云服务器都能达到200Mbps，可以支持较大的通话容量。按量计费相比按带宽计费，费用会节省更多。
 
 ## 导入docker镜像
-仅支持docker方式，x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64.md5)
+服务在2021.8.4日有重大升级，在这天之后的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64.md5)
+
+如果IM服务时2021.8.4日之前的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_old.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64_old.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_old.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64_old.md5)
 
 镜像下载之后通过下属命令导入镜像:
 ```
@@ -136,6 +138,9 @@ Janus服务处于公网，客户端无论处于任何NAT之内都应该可以连
 5. 服务器端收到后，在服务器端窗口输入内容，检查客户端是否收到对应内容。
 
 如果4、5失败说明网络之间不通，需要运维检查网络环境。如果成功，客户端需要断开，再重试几次。再更换服务器端端口，重复测试几次。UDP检查方案来源于[这里](https://docs.azure.cn/zh-cn/articles/azure-operations-guide/virtual-network/aog-virtual-network-using-netcat-check-the-connectivity#测试-udp-端口连通性)。
+
+## 服务兼容
+服务在2021.8.4日有重大升级，需要确保janus服务、IM服务和客户端SDK同时使用这个日期之前的版本或者之后的版本。如果是新的janus服务和IM服务，旧的客户端SDK，可能会有部分旧型号的手机无法接通，已知影响手机为iphone8及之前型号，Android还没有发现有不能接通问题。请升级时注意janus服务和IM服务同时升级，客户端也要尽量升级。
 
 ## 鸣谢
 本产品基于[janus](https://github.com/meetecho/janus-gateway)二次开发而来，十分感谢他们的奉献！
