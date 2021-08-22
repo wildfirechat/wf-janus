@@ -78,7 +78,7 @@ general: {
 									# Setting this to 0 will disable the timeout
 									# mechanism, and sessions will be destroyed immediately
 									# if the transport is gone.
-	#recordings_tmp_ext = "tmp"		# The extension for recordings, in Janus, is
+	recordings_tmp_ext = "tmp"		# The extension for recordings, in Janus, is
 									# .mjr, a custom format we devised ourselves.
 									# By default, we save to .mjr directly. If you'd
 									# rather the recording filename have a temporary
