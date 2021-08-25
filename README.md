@@ -118,12 +118,24 @@ sudo docker run -d --privileged=true -e DOCKER_IP=YOUR_PUBLIC_IP --name wf_janus
 扩展时需要确保每台服务的```client_id```不能重复，请同步修改janus服务的配置文件和IM服务的配置文件，确保janus配置中```client_id```是唯一的，且在IM配置文件中janus ```client_id```列表中。
 
 ## 录制文件的处理
-录制文件的格式为```mjr```，这种格式是直接把RTP信息写入文件，这样就不会对服务器造成任何的计算压力。录制后需要进行后期处理才能够播放，下载[janus-pp-rec](./janus-pp-rec)，然后执行：
+录制文件的格式为```mjr```，这种格式是直接把每个流的RTP内容写入文件，这样就不会对服务器造成任何的计算压力。录制的文件是每个用户的每个流独立存储，文件名格式如下：
 ```
-./janus-pp-rec  videoroom-${roomId}-${timestamp}-audio.mjr videoroom-${roomId}-${timestamp}.opus
-./janus-pp-rec  videoroom-${roomId}-${timestamp}-video.mjr videoroom-${roomId}-${timestamp}.mp4
+videoroom-${roomId}-user-${userId}-${timestamp}-[audio/video]-[0-2].mjr
 ```
-至此就转为常见格式了，再使用ffmepg把音频和视频结合成一个文件。janus只能支持这种格式，无法支持别的格式。
+roomId也就是会议id，如果是客户端生成格式是发起者的ID加上```|```加上随机数字，也可以应用层生产会议id发起时填入；userId为此媒体流所属的用户id；timestamp为此媒体流开始的时间；```[audio/video]``` 此媒体类是语音流还是视频流；```[0-2]```媒体类的id，一般音频是```0```，视频大流是```1```，视频小流是```2```。
+
+以9人视频会议为例，每人会录制3个文件，分别是音频文件、视频大流文件和视频小流文件，一共录制27个文件。
+
+janus只能支持这种处理方式，不能录制为常见格式也不能自动合流。因此需要进行后期处理才能够回放，下载[janus-pp-rec](./janus-pp-rec)，然后执行：
+```
+./janus-pp-rec  videoroom-${roomId}-user-${userId}-${timestamp}-audio-0.mjr 1.opus
+./janus-pp-rec  videoroom-${roomId}-user-${userId}-${timestamp}-video-1.mjr 1.mp4
+```
+再使用ffmepg把音频和视频结合成一个文件:
+```
+ffmpeg -i 1.mp4 -i 1.opus -c:v copy -c:a aac call.mp4
+```
+至此已经为一个用户合成了多媒体文件。回放还需要把多个用户的多媒体合流成一个多媒体文件（ffmpeg可以做到，具体命令请网上搜索，注意起始时间同步），或者播放时播放多个文件。
 
 详情请参考[janus录制](https://janus.conf.meetecho.com/docs/recordings.html)
 
@@ -145,6 +157,9 @@ Janus服务处于公网，客户端无论处于任何NAT之内都应该可以连
 
 ## 服务兼容
 服务在2021.8.4日有重大升级，需要确保janus服务、IM服务和客户端SDK同时使用这个日期之前的版本或者之后的版本。如果是新的janus服务和IM服务，旧的客户端SDK，可能会有部分旧型号的手机无法接通，已知影响手机为iphone8及之前型号，Android还没有发现有不能接通问题。请升级时注意janus服务和IM服务同时升级，客户端也要尽量升级。
+
+## 关于野火音视频高级版的一些基础知识
+如果需要更好地二次开发和使用，请详细阅读[野火音视频高级版的一些基础知识](https://docs.wildfirechat.cn/blogs/野火音视频高级版的一些知识.html)，确保您对野火音视频高级版有一定的了解。
 
 ## 鸣谢
 本产品基于[janus](https://github.com/meetecho/janus-gateway)二次开发而来，十分感谢他们的奉献！
