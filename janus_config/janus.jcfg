@@ -15,7 +15,7 @@ general: {
 											# to stdout or not (default=true)
 	#log_to_file = "/path/to/janus.log"		# Whether to use a log file or not
 	debug_level = 4							# Debug/logging level, valid values are 0-7
-	#debug_timestamps = true				# Whether to show a timestamp for each log line
+	debug_timestamps = true				# Whether to show a timestamp for each log line
 	#debug_colors = false					# Whether colors should be disabled in the log
 	#debug_locks = true						# Whether to enable debugging of locks (very verbose!)
 	#log_prefix = "[janus] "				# In case you want log lines to be prefixed by some
@@ -202,7 +202,7 @@ media: {
 	rtp_port_range = "20000-40000"
 	dtls_mtu = 1200
 	#no_media_timer = 1
-	#slowlink_threshold = 4
+	slowlink_threshold = 10
 	#twcc_period = 100
 	#dtls_timeout = 500
 
@@ -315,7 +315,7 @@ nat: {
 	# Just beware that the ICE ignore list is not used if an enforce list
 	# has been configured. By default, Janus ignores all interfaces whose
 	# name starts with 'vmnet', to skip VMware interfaces:
-	ice_ignore_list = "vmnet"
+	ice_ignore_list = "vmnet,docker"
 
 	# In case you want to allow Janus to start even if the configured STUN or TURN
 	# server is unreachable, you can set 'ignore_unreachable_ice_server' to true.
