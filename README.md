@@ -24,7 +24,7 @@ sudo docker load -i wildfire_janus_amd64.tar
     ```
     general: {
       enabled = true            # Whether the support must be enabled
-      im_host = "imdev.wildfirechat.cn"  # Wildfire IM server host
+      im_host = "im_server_host"  # Wildfire IM server host
       im_port = 80  # Wildfire IM server http port。请保持不变，仅当改动过客户端端口时修改
       client_id = "conference_server_1"				# Client identifier
       subscribe_topic = "to-janus"		# Topic for incoming messages，需要和im server配置里面的 conference.to_topic 一致
@@ -32,7 +32,7 @@ sudo docker load -i wildfire_janus_amd64.tar
       ...
     }
     ```
-    >im_host 要使用专业版的授权域名，client_id为了安全，请使用一个随机的uuid，如果部署多台，需要确保每台都的client_id都是唯一的，client_id和subscribe_topic和publish_topic要和IM服务配置中的值对应。
+    >im_host和im_port是janus访问IM服务短连接的地址和端口，如果janus与im服务在同一个内网中，可以使用内网地址，如果使用域名，需要确保janus能够访问这个地址，client_id为了安全，请使用一个随机的uuid，如果部署多台，需要确保每台都的client_id都是唯一的，client_id和subscribe_topic和publish_topic要和IM服务配置中的值对应。
 2. 修改```janus.jcfg```
     ```
     media: {
