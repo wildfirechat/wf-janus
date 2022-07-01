@@ -162,6 +162,17 @@ Janus服务处于公网，客户端无论处于任何NAT之内都应该可以连
 
 如果4、5失败说明网络之间不通，需要运维检查网络环境。如果成功，客户端需要断开，再重试几次。再更换服务器端端口，重复测试几次。UDP检查方案来源于[这里](https://docs.azure.cn/zh-cn/articles/azure-operations-guide/virtual-network/aog-virtual-network-using-netcat-check-the-connectivity#测试-udp-端口连通性)。
 
+## ffmpeg安装
+录制音视频转换工具[janus-pp-rec](./janus-pp-rec)需要依赖ffmpeg库3.X，一般通过命令直接安装即可。如果无法直接安装，也可以下载源码编译安装：
+```
+wget https://github.com/FFmpeg/FFmpeg/releases/download/n3.0/ffmpeg-3.0.tar.gz
+tar -xzvf ffmpeg-3.0.tar.gz
+cd ffmpeg-3.0
+./configure --prefix=/usr --enable-shared
+make
+sudo make install
+```
+
 ## 服务兼容
 服务在2021.8.4日有重大升级，需要确保janus服务、IM服务和客户端SDK同时使用这个日期之前的版本或者之后的版本。如果是新的janus服务和IM服务，旧的客户端SDK，可能会有部分旧型号的手机无法接通，已知影响手机为iphone8及之前型号，Android还没有发现有不能接通问题。请升级时注意janus服务和IM服务同时升级，客户端也要尽量升级。
 
