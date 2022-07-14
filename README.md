@@ -8,9 +8,11 @@
 由于使用的是SFU架构，所有流量都经过媒体服务，对带宽的要求非常高。如果使用固定带宽，价格会非常高昂。建议使用按照流量计费，大部分云服务器都能达到200Mbps，可以支持较大的通话容量。按量计费相比按带宽计费，费用会节省更多。
 
 ## 导入docker镜像
-服务在2021.8.4日有重大升级，在这天之后的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64.md5)
+服务在2021.8.4日和2022.7.14有重大升级，最新的版本从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64.md5)
 
-如果IM服务时2021.8.4日之前的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_legacy.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64_legacy.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_legacy.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64_legacy.md5)
+如果IM服务是2022.7.14日之前的版本，从这里下载：x86_64镜像在[这里](https://static.wildfirechat.cn/wildfire_janus_amd64_before_20220714.tar)，下载完之后检查[md5](https://static.wildfirechat.cn/wildfire_janus_amd64_before_20220714.md5)；arm64镜像在[这里](https://static.wildfirechat.cn/wildfire_janus_arm64_before_20220714.tar)，下载完之后检查[md5](https://static.wildfirechat.cn/wildfire_janus_arm64_before_20220714.md5)
+
+如果IM服务是2021.8.4日之前的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_legacy.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64_legacy.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_legacy.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64_legacy.md5)
 
 镜像下载之后通过下属命令导入镜像:
 ```
@@ -174,7 +176,7 @@ sudo make install
 ```
 
 ## 服务兼容
-服务在2021.8.4日有重大升级，需要确保janus服务、IM服务和客户端SDK同时使用这个日期之前的版本或者之后的版本。如果是新的janus服务和IM服务，旧的客户端SDK，可能会有部分旧型号的手机无法接通，已知影响手机为iphone8及之前型号，Android还没有发现有不能接通问题。请升级时注意janus服务和IM服务同时升级，客户端也要尽量升级。
+服务在2021.8.4日和2022.7.14日有重大升级，需要确保janus服务、IM服务和客户端SDK同时使用这个日期之前的版本或者之后的版本。如果是新的janus服务和IM服务，旧的客户端SDK，可能会有部分旧型号的手机无法接通，已知影响手机为iphone8及之前型号，Android还没有发现有不能接通问题。请升级时注意janus服务和IM服务同时升级，客户端也要尽量升级。
 
 ## 关于野火音视频高级版的一些基础知识
 如果需要更好地二次开发和使用，请详细阅读[野火音视频高级版的一些基础知识](https://docs.wildfirechat.cn/blogs/野火音视频高级版的一些知识.html)，确保您对野火音视频高级版有一定的了解。
