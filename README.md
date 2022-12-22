@@ -154,6 +154,27 @@ ffmpeg -i 1.mp4 -i 1.opus -c:v copy -c:a aac call.mp4
 
 详情请参考[janus录制](https://janus.conf.meetecho.com/docs/recordings.html)
 
+## 媒体流转发（RTP_FORWARD）
+RTP_FORWARD是[janus](https://janus.conf.meetecho.com/docs/videoroom.html)一个有意思的功能，可以把音视频的RTP流实时的转发到指定的UDP端口上去。这样当需要把会议内容实时推流到直播平台时，就可以使用这种方法。请注意这里janus只是把RTP流原封不动的转发出来，还需要不小的工作量做来把音视频转换后再推送到直播平台。下面讲一下如果使用媒体流转发功能：
+
+### 开启转发
+在server sdk中的ConferenceAdmin对象中，有个listParticipants方法，可以查询到用户的发布媒体流情况，可以得到媒体类型（音频还是视频）、媒体ID、编码（音频为opus，视频为H264/VP8）。当知道这些信息后，就可以调用rtpForward方法把音视频流转到指定地址去
+```
+static IMResult<Void> rtpForward(String roomId, String userId, String rtpHost, int audioPort, int audioPt, long audioSSRC, int videoPort, int videoPt, long videoSSRC)
+```
+方法中，roomId为房间ID，也就是客户端看到的callId或者会议ID；userId为您要转发用户的ID；rtpHost只接收地址。音频和视频要分开转发，需要不同的端口，如果不需要某个流，可以把对应的port赋为0就行。audioPt一般为111，videoPt在H264编码时为98，VP8时为100（实际上其他数字也可以，在接收端需要把PT对应起来）。SSRC默认可以为0.
+
+当开启成功后，指定用户的RTP流就会持续的转发过去。可以使用gstreamer来处理转发过来的流，比如下面会播放收到的视频流
+```
+gst-launch-1.0 -v udpsrc port=10005 caps = "application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264, payload=(int)98" ! rtph264depay ! decodebin ! videoconvert ! autovideosink sync=false
+```
+
+### 查询转发
+在server sdk中的ConferenceAdmin对象中，有个listRtpForwarders方法，可以查询到已经开启的媒体流转发状态。查询的每个流中都有个streamId，停止媒体转发需要使用到此参数，所以一般停止之前都需要先查询一下。
+
+### 停止转发
+当不需要时，可以停止转发。在server sdk中的ConferenceAdmin对象中，有个stopForwarders方法，可以查询到已经开启的媒体流转发状态。注意此参数需要对每个流调用一次，比如某个用户同时转发了音频流和视频流，需要调用2次来停止。
+
 ## 问题排查
 1. 服务器公网IP配置不对，也就是启动命令中的```DOCKER_IP```参数。一定要使用服务器的公网IP地址，不能是域名也不能是内网IP。
 2. 没有配置```ice_enforce_list```。如果有多个网卡，请打开这个配置，并指定对应的绑定公网IP的网卡。
