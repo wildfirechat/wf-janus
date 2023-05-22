@@ -7,6 +7,8 @@
 ## 服务器的选用
 由于使用的是SFU架构，所有流量都经过媒体服务，对带宽的要求非常高。如果使用固定带宽，价格会非常高昂。建议使用按照流量计费，大部分云服务器都能达到200Mbps，可以支持较大的通话容量。按量计费相比按带宽计费，费用会节省更多。
 
+客户端会跟Janus服务进行直连，所以就需要Janus服务部署在公网，或者有足够多的UDP端口映射到公网。
+
 ## 导入docker镜像
 服务在2021.8.4日和2022.7.14有重大升级，最新的版本从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64.md5)
 
