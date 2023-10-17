@@ -23,8 +23,8 @@ sudo docker load -i wildfire_janus_amd64.tar
 > arm服务器请导入对应的arm镜像
 
 ## 修改配置
-下载```janus_config```到服务器。
-1. 修改```janus.transport.mqtt.jcfg```
+下载[janus_config](./janus_config)目录到服务器。
+1. 修改目录下的```janus.transport.mqtt.jcfg```
     ```
     general: {
       enabled = true            # Whether the support must be enabled
@@ -55,11 +55,11 @@ sudo docker load -i wildfire_janus_amd64.tar
     }
 
     ```
-    > rtp_port_range 为媒体流使用的UDP端口范围，端口至少5000个。UDP端口范围默认是20000-40000，如果修改端口范围请确保在这个区间内。需要确保服务器防火墙和安全组放开权限，需要确保客户端网络防火墙放开权限。
+    > rtp_port_range 为媒体流使用的UDP端口范围，端口至少5000个。UDP端口范围默认是20000-40000，如果修改端口范围建议最小端口大于10000，最大不能超过65535。需要确保服务器防火墙和安全组放开权限，需要确保客户端网络防火墙放开权限。
 
     > 如果宿主机上有多于一个网卡，需要指定使用那个网卡，请打开配置文件中的```ice_enforce_list```配置，设置上外网IP所对应的网卡。
 
-3. 修改```janus.plugin.videoroom.jcfg```
+3. 修改目录下的```janus.plugin.videoroom.jcfg```
     ```
     string_ids = true
 
