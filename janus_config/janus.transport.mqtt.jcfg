@@ -4,11 +4,11 @@ general: {
 	#events = true						# Whether to notify event handlers about transport events (default=true)
 	json = "compact"						# Whether the JSON messages should be indented (default),
 										# plain (no indentation) or compact (no indentation and no spaces)
-	im_host = "imdev.wildfirechat.cn" # Wildfire IM server host
+	im_host = "192.168.1.81" # Wildfire IM server host
 	im_port = 80  # Wildfire IM server http port
 	#mqtt_port = 1883  # Wildfire IM server mqtt port. 2021.8.4以后版本不需要配置。
 
-	client_id = "conference_server_1"		# Client identifier
+	client_id = "conference_server_1"		# 只能写一个ID，必须是IM服务配置的id之一，如果有多个Janus服务，不能重复。
 	#keep_alive_interval = 20			# Keep connection for N seconds
 	#cleansession = 0					# Clean session flag
 	max_inflight = 512					# Maximum number of inflight messages

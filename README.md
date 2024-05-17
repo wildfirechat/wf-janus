@@ -30,13 +30,11 @@ sudo docker load -i wildfire_janus_amd64.tar
       enabled = true            # Whether the support must be enabled
       im_host = "im_server_host"  # Wildfire IM server host
       im_port = 80  # Wildfire IM server http port。请保持不变，仅当改动过客户端端口时修改
-      client_id = "conference_server_1"				# Client identifier
-      subscribe_topic = "to-janus"		# Topic for incoming messages，需要和im server配置里面的 conference.to_topic 一致
-      publish_topic = "from-janus"		# Topic for outgoing messages，需要和im server配置里面的 conference.from_topic 一致
+      client_id = "conference_server_1"				# 必须是IM服务配置conference.client_list的id之一，如果有多个Janus服务，不能重复。
       ...
     }
     ```
-    >im_host和im_port是janus访问IM服务短连接的地址和端口，如果janus与im服务在同一个内网中，可以使用内网地址，如果使用域名，需要确保janus能够访问这个地址，client_id为了安全，请使用一个随机的uuid，如果部署多台，需要确保每台都的client_id都是唯一的，client_id和subscribe_topic和publish_topic要和IM服务配置中的值对应。
+    >im_host和im_port是janus访问IM服务短连接的地址和端口，如果janus与im服务在同一个内网中，建议可以使用内网地址，如果使用域名，需要确保janus能够访问这个地址，client_id为了安全，请使用一个随机的uuid，如果部署多台，需要确保每台都的client_id都是唯一的，client_id需要配置到IM服务配置文件中的conference.client_list列表中去。
 2. 修改```janus.jcfg```
     ```
     media: {
@@ -49,30 +47,22 @@ sudo docker load -i wildfire_janus_amd64.tar
       ...
       ice_lite = true
       ...
-      # 多网卡时需要打开并指定网卡
-      #ice_enforce_list = "eth0"
+      ice_enforce_list = "eth0"
       ...
     }
 
     ```
     > rtp_port_range 为媒体流使用的UDP端口范围，端口至少5000个。UDP端口范围默认是20000-40000，如果修改端口范围建议最小端口大于10000，最大不能超过65535。需要确保服务器防火墙和安全组放开权限，需要确保客户端网络防火墙放开权限。
 
-    > 如果宿主机上有多于一个网卡，需要指定使用那个网卡，请打开配置文件中的```ice_enforce_list```配置，设置上外网IP所对应的网卡。
-
-3. 修改目录下的```janus.plugin.videoroom.jcfg```
-    ```
-    string_ids = true
-
-    ```
+    > 配置文件中的```ice_enforce_list```配置需要设置上外网IP所对应的网卡。
 
 ## 防火墙和安全组设置
 服务器需要开放UDP指定端口范围的入访权限（默认是20000-40000）。服务器需要去连接IM，需要开通到IM服务的80/1883端口。
 
 ## 修改IM服务
-IM服务配置文件中修改音视频服务的client_id列表、signal_server_address、subscribe_topic和publish_topic。其中：
-1. client_id列表要包含所有janus服务的clientId，为了以后扩展方便，预先写入多个id；
+IM服务配置文件中修改音视频服务的client_id列表、signal_server_address。其中：
+1. client_id列表要包含所有janus服务的clientId，为了以后扩展方便，可以预先写入多个id；
 2. signal_server_address填写当前IM服务的内网地址，这样janus服务就与IM服务内网通信；
-3. subscribe_topic和publish_topic要和janus配置的topic保持一致；
 
 修改配置后重新启动IM服务。
 
@@ -179,7 +169,7 @@ gst-launch-1.0 -v udpsrc port=10005 caps = "application/x-rtp, media=(string)vid
 
 ## 问题排查
 1. 服务器公网IP配置不对，也就是启动命令中的```DOCKER_IP```参数。一定要使用服务器的公网IP地址，不能是域名也不能是内网IP。
-2. 没有配置```ice_enforce_list```。如果有多个网卡，请打开这个配置，并指定对应的绑定公网IP的网卡。
+2. 没有配置```ice_enforce_list```或者配置错误。请指定为绑定公网IP的网卡。
 3. 服务挂掉。当出现严重错误或者IM服务节点变动时，Janus会自动退出，这时需要在docker启动命令中添加```--restart=always```参数，让janus服务自动重启。
 4. 客户端到服务器的连通问题，这时需要检查云服务器的安全组和防火墙是否开放了对应的UDP端口。确认过安全组和防火墙后如果还是无法正常使用，请再按照下面说明检查端口是否是通的。
 
