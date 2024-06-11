@@ -60,8 +60,8 @@ sudo docker load -i wildfire_janus_amd64.tar
 服务器需要开放UDP指定端口范围的入访权限（默认是20000-40000）。服务器需要去连接IM，需要开通到IM服务的80/1883端口。
 
 ## 修改IM服务
-IM服务配置文件中修改音视频服务的client_id列表、signal_server_address。其中：
-1. client_id列表要包含所有janus服务的clientId，为了以后扩展方便，可以预先写入多个id；
+IM服务配置文件中修改音视频服务的client_id列表(conference.client_list)、signal_server_address(conference.signal_server_address)。其中：
+1. client_id列表要包含所有janus服务的clientId，以逗号分割，为了以后扩展方便，可以预先写入多个id；
 2. signal_server_address填写当前IM服务的内网地址，这样janus服务就与IM服务内网通信；
 
 修改配置后重新启动IM服务。
@@ -168,10 +168,12 @@ gst-launch-1.0 -v udpsrc port=10005 caps = "application/x-rtp, media=(string)vid
 当不需要时，可以停止转发。在server sdk中的ConferenceAdmin对象中，有个stopForwarders方法，可以查询到已经开启的媒体流转发状态。注意此参数需要对每个流调用一次，比如某个用户同时转发了音频流和视频流，需要调用2次来停止。
 
 ## 问题排查
-1. 服务器公网IP配置不对，也就是启动命令中的```DOCKER_IP```参数。一定要使用服务器的公网IP地址，不能是域名也不能是内网IP。
-2. 没有配置```ice_enforce_list```或者配置错误。请指定为绑定公网IP的网卡。
-3. 服务挂掉。当出现严重错误或者IM服务节点变动时，Janus会自动退出，这时需要在docker启动命令中添加```--restart=always```参数，让janus服务自动重启。
-4. 客户端到服务器的连通问题，这时需要检查云服务器的安全组和防火墙是否开放了对应的UDP端口。确认过安全组和防火墙后如果还是无法正常使用，请再按照下面说明检查端口是否是通的。
+1. 音视频依赖IM作为信令通道的，首先确保通话双方能够互相发送文本消息。
+2. 服务器公网IP配置不对，也就是启动命令中的```DOCKER_IP```参数。一定要使用***服务器的公网IP地址***，不能是域名也不能是内网IP。
+3. 没有配置```ice_enforce_list```或者配置错误。请指定为绑定公网IP的网卡。
+4. Janus服务挂掉。当出现严重错误或者IM服务节点变动时，Janus会自动退出，这时需要在docker启动命令中添加```--restart=always```参数，让janus服务自动重启。
+5. 客户端到服务器的连通问题，这时需要检查云服务器的安全组和防火墙是否开放了对应的UDP端口。确认过安全组和防火墙后如果还是无法正常使用，请再按照下面说明检查端口是否是通的。
+6. 移动客户端音视频SDK授权域名不对，请检查客户端配置文件中的***IM host***是不是跟音视频SDK绑定的地址一致。
 
 ### UDP端口连通性检查
 Janus服务处于公网，客户端无论处于任何NAT之内都应该可以连接。当出现连接超时的错误时，很有可能是Janus与客户端之间UDP端口无法互通。可以用[netcat](https://www.baidu.com/s?wd=netcat)来检查他们之间的连通性。
