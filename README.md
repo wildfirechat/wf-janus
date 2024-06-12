@@ -54,7 +54,7 @@ sudo docker load -i wildfire_janus_amd64.tar
     ```
     > rtp_port_range 为媒体流使用的UDP端口范围，端口至少5000个。UDP端口范围默认是20000-40000，如果修改端口范围建议最小端口大于10000，最大不能超过65535。需要确保服务器防火墙和安全组放开权限，需要确保客户端网络防火墙放开权限。
 
-    > 配置文件中的```ice_enforce_list```配置需要设置上外网IP所对应的网卡。
+    > 配置文件中的```ice_enforce_list```配置需要设置上外网IP所对应的网卡。查找网卡名称可以用```ifconfig```命令来查看。
 
 ## 防火墙和安全组设置
 服务器需要开放UDP指定端口范围的入访权限（默认是20000-40000）。服务器需要去连接IM，需要开通到IM服务的80/1883端口。
@@ -71,7 +71,7 @@ IM服务启动之后才可以启动媒体服务。请使用下面命令启动：
 ```
 sudo docker run -it --privileged=true -e DOCKER_IP=YOUR_PUBLIC_IP --name wf_janus_server --net host -v PATH_TO_janus_config:/var/janus/janus/etc/janus -v PATH_TO_RECORDS_FOLDER:/opt/janus/share/janus/recordings wildfire_janus
 ```
-注意```YOUR_PUBLIC_IP```为服务器的外网IP，```PATH_TO_janus_config```为配置文件的路径，```PATH_TO_RECORDS_FOLDER```为录制文件保存目录，**这三个占位符本身需要修改为具体的值，而不是修改```:```后面那部分，其他的不用修改**, 下面是修改后的命令示例:
+注意```YOUR_PUBLIC_IP```为Janus服务所在服务器的外网IP，```PATH_TO_janus_config```为配置文件的路径，```PATH_TO_RECORDS_FOLDER```为录制文件保存目录，**这三个占位符本身需要修改为具体的值，而不是修改```:```后面那部分，其他的不用修改**, 下面是修改后的命令示例:
 
 ```
 sudo docker run -it --privileged=true -e DOCKER_IP=46.8.147.195 --name wfc_janus_server --net host -v /Users/userName/wf-janus/config:/var/janus/janus/etc/janus -v /Users/userName/records_folder:/opt/janus/share/janus/recordings wildfire_janus
