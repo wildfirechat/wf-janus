@@ -169,12 +169,12 @@ gst-launch-1.0 -v udpsrc port=10005 caps = "application/x-rtp, media=(string)vid
 
 ## 问题排查
 1. 音视频依赖IM作为信令通道的，首先确保通话双方能够互相发送文本消息。
-2. 服务器公网IP配置不对，也就是启动命令中的```DOCKER_IP```参数。一定要使用***服务器的公网IP地址***，不能是域名也不能是内网IP。
+2. Janus服务器公网IP配置不对，也就是启动命令中的```DOCKER_IP```参数。一定要使用***Janus服务器的公网IP地址***，不能是域名也不能是内网IP，也不能配置为IM服务的地址（分开部署的情况下）。
 3. 没有配置```ice_enforce_list```或者配置错误。请指定为绑定公网IP的网卡。
 4. Janus服务挂掉。当出现严重错误或者IM服务节点变动时，Janus会自动退出，这时需要在docker启动命令中添加```--restart=always```参数，让janus服务自动重启。
 5. 客户端到服务器的连通问题，这时需要检查云服务器的安全组和防火墙是否开放了对应的UDP端口。确认过安全组和防火墙后如果还是无法正常使用，请再按照下面说明检查端口是否是通的。
 6. 移动客户端音视频SDK授权域名不对，请检查客户端配置文件中的***IM host***是不是跟音视频SDK绑定的地址一致。
-7. 如果上述检查还是无法解决问题，请抓取IM服务日志，janus服务日志和客户端日志发送给support@wildfirechat.cn，其中IM服务日志需要改成同步写，请参考[IM服务常见问题](https://docs.wildfirechat.cn/faq/server.html)中的问题44。
+7. 如果上述检查还是无法解决问题，请抓取IM服务日志，janus服务日志和客户端日志发送给support@wildfirechat.cn，其中IM服务日志需要改成同步写，请参考[IM服务常见问题](https://docs.wildfirechat.cn/faq/server.html)中的问题45。
 
 ### UDP端口连通性检查
 Janus服务处于公网，客户端无论处于任何NAT之内都应该可以连接。当出现连接超时的错误时，很有可能是Janus与客户端之间UDP端口无法互通。可以用[netcat](https://www.baidu.com/s?wd=netcat)来检查他们之间的连通性。
