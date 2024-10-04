@@ -10,7 +10,9 @@
 客户端会跟Janus服务进行直连，所以就需要Janus服务部署在公网，或者有足够多的UDP端口映射到公网。
 
 ## 导入docker镜像
-服务在2021.8.4日和2022.7.14有重大升级，最新的版本从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64.md5)
+服务在2021.8.4日、2022.7.14和2024.10.4有重大升级，最新的版本从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_ff1f4f4e.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64_ff1f4f4e.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_ff1f4f4e.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64_ff1f4f4e.md5)
+
+如果IM服务是2024.10.4日之前的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_before_20241004.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64_before_20241004.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_before_20241004.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64_before_20241004.md5)
 
 如果IM服务是2022.7.14日之前的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.cn/wildfire_janus_amd64_before_20220714.tar)，下载完之后检查[md5](http://static.wildfirechat.cn/wildfire_janus_amd64_before_20220714.md5)；arm64镜像在[这里](http://static.wildfirechat.cn/wildfire_janus_arm64_before_20220714.tar)，下载完之后检查[md5](http://static.wildfirechat.cn/wildfire_janus_arm64_before_20220714.md5)
 
@@ -178,7 +180,7 @@ gst-launch-1.0 -v udpsrc port=10005 caps = "application/x-rtp, media=(string)vid
 
 ### UDP端口连通性检查
 Janus服务处于公网，客户端无论处于任何NAT之内都应该可以连接。当出现连接超时的错误时，很有可能是Janus与客户端之间UDP端口无法互通。可以用[netcat](https://www.baidu.com/s?wd=netcat)来检查他们之间的连通性。
-1. 环境准备: 需要在客户端网络之内准备一台linux或者mac作为测试客户端；在测试客户端和janus服务器上分别安装```netcat```，已知Ubuntu和mac已经预安装了，centos可以用命令```yum install -y nc```来安装。其它系统可以百度怎么安装。
+1. 环境准备: 需要在客户端网络之内准备一台linux或者mac作为测试客户端(不能用同一个机房的服务器，如果本地没有linux或者mac，可以去外网外地购买一台按小时计费的最低配云服务器，一天不到2元，测试完释放花不了多少钱)；在测试客户端和janus服务器上分别安装```netcat```，已知Ubuntu和mac已经预安装了，centos可以用命令```yum install -y nc```来安装。其它系统可以百度怎么安装。
 2. 在Janus服务上，执行命令 ```nc -ulvp 30000```。30000为监听UDP端口，需要注意Janus服务配置的端口范围之内。
 3. 在客户端上执行命令 ```nc -u YOUR_PUBLIC_IP 30000```。```YOUR_PUBLIC_IP```是Janus服务的公网IP，也是启动命令内的参数。
 4. 在客户端输入内容，检查服务器端是否收到对应内容。
