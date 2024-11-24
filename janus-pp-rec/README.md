@@ -33,6 +33,9 @@ sudo yum install ffmpeg ffmpeg-devel
 ```
 其它系统或者遇到问题，请百度或者谷歌查找解决
 
+## 处理脚本
+我们提供了一个简单的处理工具，见此目录下的zip软件包。可以把会议转成MP4文件。可以直接使用或者参考来实现你们自己的需求。
+
 
 ## 鸣谢
 感谢[janus](https://github.com/meetecho/janus-gateway)提供如此好的开源产品。
