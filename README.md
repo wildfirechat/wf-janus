@@ -64,7 +64,7 @@ sudo docker load -i wildfire_janus_amd64.tar
 ## 修改IM服务
 IM服务配置文件中修改音视频服务的client_id列表(conference.client_list)、signal_server_address(conference.signal_server_address)。其中：
 1. client_id列表要包含所有janus服务的clientId，以逗号分割，为了以后扩展方便，可以预先写入多个id；
-2. signal_server_address填写当前IM服务的内网地址，这样janus服务就与IM服务内网通信；
+2. signal_server_address填写***当前IM服务的内网IP，不能是域名或者别名***，Janus服务只认IP地址，注意这个配置为***当前IM服务的内网IP地址，不是音视频服务的内网IP地址***；
 
 修改配置后重新启动IM服务。
 
@@ -85,6 +85,7 @@ sudo docker run -d --privileged=true -e DOCKER_IP=YOUR_PUBLIC_IP --name wf_janus
 ```
 
 > --restart=always 一定要设置上，因为当出现不可逆错误时，janus服务会退出，这样自动重启就能恢复。
+> --net host 参数不能遗忘，janus服务需要跟外网通讯，要么host网络，要么做端口映射。建议host网络性能更好更容易。
 > docker 挂载主机目录，请参考 [docker run -v](https://www.cnblogs.com/starfish29/p/10653960.html), [docker volums](https://docs.docker.com/storage/volumes/)
 
 ## 客户端
@@ -174,6 +175,7 @@ gst-launch-1.0 -v udpsrc port=10005 caps = "application/x-rtp, media=(string)vid
 2. Janus服务器公网IP配置不对，也就是启动命令中的```DOCKER_IP```参数。一定要使用***Janus服务器的公网IP地址***，不能是域名也不能是内网IP，也不能配置为IM服务的地址（分开部署的情况下）。
 3. 没有配置```ice_enforce_list```或者配置错误。请指定为绑定公网IP的网卡。
 4. Janus服务挂掉。当出现严重错误或者IM服务节点变动时，Janus会自动退出，这时需要在docker启动命令中添加```--restart=always```参数，让janus服务自动重启。
+5. Janus没有配置好网络。janus服务需要跟外网通讯，需要启动命令中添加参数```--net host```。
 5. 客户端到服务器的连通问题，这时需要检查云服务器的安全组和防火墙是否开放了对应的UDP端口。确认过安全组和防火墙后如果还是无法正常使用，请再按照下面说明检查端口是否是通的。
 6. 移动客户端音视频SDK授权域名不对，请检查客户端配置文件中的***IM host***是不是跟音视频SDK绑定的地址一致。
 7. 如果上述检查还是无法解决问题，请抓取IM服务日志，janus服务日志和客户端日志发送给support@wildfirechat.cn，其中IM服务日志需要改成同步写，请参考[IM服务常见问题](https://docs.wildfirechat.cn/faq/server.html)中的问题45。
