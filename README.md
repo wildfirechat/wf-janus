@@ -10,13 +10,13 @@
 客户端会跟Janus服务进行直连，所以就需要Janus服务部署在公网，或者有足够多的UDP端口映射到公网。
 
 ## 导入docker镜像
-服务在2021.8.4日、2022.7.14和2024.10.4有重大升级，最新的版本从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_ff1f4f4e.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64_ff1f4f4e.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_ff1f4f4e.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64_ff1f4f4e.md5)
+服务在2021.8.4日、2022.7.14和2024.10.4有重大升级，最新的版本从这里下载：x86_64镜像在[这里](https://static.wildfirechat.net/wildfire_janus_amd64_ff1f4f4e.tar)，下载完之后检查[md5](https://static.wildfirechat.net/wildfire_janus_amd64_ff1f4f4e.md5)；arm64镜像在[这里](https://static.wildfirechat.net/wildfire_janus_arm64_ff1f4f4e.tar)，下载完之后检查[md5](https://static.wildfirechat.net/wildfire_janus_arm64_ff1f4f4e.md5)
 
-如果IM服务是2024.10.4日之前的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_before_20241004.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64_before_20241004.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_before_20241004.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64_before_20241004.md5)
+如果IM服务是2024.10.4日之前的版本，从这里下载：x86_64镜像在[这里](https://static.wildfirechat.net/wildfire_janus_amd64_before_20241004.tar)，下载完之后检查[md5](https://static.wildfirechat.net/wildfire_janus_amd64_before_20241004.md5)；arm64镜像在[这里](https://static.wildfirechat.net/wildfire_janus_arm64_before_20241004.tar)，下载完之后检查[md5](https://static.wildfirechat.net/wildfire_janus_arm64_before_20241004.md5)
 
-如果IM服务是2022.7.14日之前的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.cn/wildfire_janus_amd64_before_20220714.tar)，下载完之后检查[md5](http://static.wildfirechat.cn/wildfire_janus_amd64_before_20220714.md5)；arm64镜像在[这里](http://static.wildfirechat.cn/wildfire_janus_arm64_before_20220714.tar)，下载完之后检查[md5](http://static.wildfirechat.cn/wildfire_janus_arm64_before_20220714.md5)
+如果IM服务是2022.7.14日之前的版本，从这里下载：x86_64镜像在[这里](https://static.wildfirechat.cn/wildfire_janus_amd64_before_20220714.tar)，下载完之后检查[md5](https://static.wildfirechat.cn/wildfire_janus_amd64_before_20220714.md5)；arm64镜像在[这里](https://static.wildfirechat.cn/wildfire_janus_arm64_before_20220714.tar)，下载完之后检查[md5](https://static.wildfirechat.cn/wildfire_janus_arm64_before_20220714.md5)
 
-如果IM服务是2021.8.4日之前的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_legacy.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64_legacy.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_legacy.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64_legacy.md5)
+如果IM服务是2021.8.4日之前的版本，从这里下载：x86_64镜像在[这里](https://static.wildfirechat.net/wildfire_janus_amd64_legacy.tar)，下载完之后检查[md5](https://static.wildfirechat.net/wildfire_janus_amd64_legacy.md5)；arm64镜像在[这里](https://static.wildfirechat.net/wildfire_janus_arm64_legacy.tar)，下载完之后检查[md5](https://static.wildfirechat.net/wildfire_janus_arm64_legacy.md5)
 
 镜像下载之后通过下属命令导入镜像:
 ```
