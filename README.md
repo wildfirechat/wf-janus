@@ -75,7 +75,7 @@ IM服务启动之后才可以启动媒体服务。请使用下面命令启动：
 ```
 sudo docker run -it --privileged=true -e DOCKER_IP=YOUR_PUBLIC_IP(服务器公网IP) --name wf_janus_server --net host -v PATH_TO_janus_config(配置文件目录的绝对路径):/var/janus/janus/etc/janus -v PATH_TO_RECORDS_FOLDER(用来保存会议录制的目录的绝对路径):/opt/janus/share/janus/recordings wildfire_janus
 ```
-注意```YOUR_PUBLIC_IP(服务器公网IP)```为Janus服务所在服务器的外网IP，```PATH_TO_janus_config(配置文件目录的绝对路径)```为配置文件的路径，```PATH_TO_RECORDS_FOLDER(用来保存会议录制的目录的绝对路径)```为录制文件保存目录，**这三个占位符本身需要修改为具体的值，而不是修改```:```后面那部分，其他的不用修改**, 下面是修改后的命令示例:
+注意```YOUR_PUBLIC_IP(服务器公网IP)```为Janus服务所在服务器的外网IP，```PATH_TO_janus_config(配置文件目录的绝对路径)```为配置文件的路径，```PATH_TO_RECORDS_FOLDER(用来保存会议录制的目录的绝对路径，需要有写权限)```为录制文件保存目录，**这三个占位符本身需要修改为具体的值，而不是修改```:```后面那部分，其他的不用修改**, 下面是修改后的命令示例:
 
 ```
 sudo docker run -it --privileged=true -e DOCKER_IP=46.8.147.195 --name wfc_janus_server --net host -v /Users/userName/wf-janus/config:/var/janus/janus/etc/janus -v /Users/userName/records_folder:/opt/janus/share/janus/recordings wildfire_janus
