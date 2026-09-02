@@ -9,25 +9,101 @@
 
 客户端会跟Janus服务进行直连，所以就需要Janus服务部署在公网，或者有足够多的UDP端口映射到公网。
 
-## 导入docker镜像
-服务在2021.8.4日、2022.7.14、2024.10.4和2025.10.11有重大升级，最新的版本从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_5742f701_amd64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_5742f701_amd64.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_5742f701_arm64.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_5742f701_arm64.md5)
+## 部署方式
+媒体服务支持两种部署方式，任选其一：
 
-如果IM服务是2025.10.11日之前的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_ff1f4f4e.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64_ff1f4f4e.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_ff1f4f4e.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64_ff1f4f4e.md5)
+- **方式一：Docker 部署**（适合已有 Docker 环境的服务器）
+- **方式二：免 Docker 自包含运行时部署**（适合不方便安装 Docker 的服务器）
 
-如果IM服务是2024.10.4日之前的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_before_20241004.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64_before_20241004.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_before_20241004.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64_before_20241004.md5)
+两种方式的配置、客户端使用完全一致，仅部署命令不同。
 
-如果IM服务是2022.7.14日之前的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.cn/wildfire_janus_amd64_before_20220714.tar)，下载完之后检查[md5](http://static.wildfirechat.cn/wildfire_janus_amd64_before_20220714.md5)；arm64镜像在[这里](http://static.wildfirechat.cn/wildfire_janus_arm64_before_20220714.tar)，下载完之后检查[md5](http://static.wildfirechat.cn/wildfire_janus_arm64_before_20220714.md5)
+完整部署流程（两种方式通用，顺序如下）：
 
-如果IM服务是2021.8.4日之前的版本，从这里下载：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_legacy.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_amd64_legacy.md5)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_legacy.tar)，下载完之后检查[md5](http://static.wildfirechat.net/wildfire_janus_arm64_legacy.md5)
+1. 按所选方式下载并部署媒体服务（见下）
+2. 修改配置文件：[修改配置](#修改配置)
+3. 开放防火墙端口：[防火墙和安全组设置](#防火墙和安全组设置)
+4. 修改 IM 服务：[修改IM服务](#修改im服务)
+5. 启动媒体服务：[启动媒体服务](#启动媒体服务)
 
-镜像下载之后通过下属命令导入镜像:
+### 方式一：Docker 部署
+
+#### 下载 Docker 镜像
+最新版本从这里下载：x86_64镜像在[这里](./release/2026.9.2/wildfire_janus_91f9b281_amd64.tar)；arm64镜像在[这里](./release/2026.9.2/wildfire_janus_91f9b281_arm64.tar)
+
+选择对应架构的镜像，镜像下载之后通过如下命令导入:
 ```
 sudo docker load -i wildfire_janus_amd64.tar
 ```
-> arm服务器请导入对应的arm镜像
+> arm服务器请导入对应的arm镜像，不能弄混了。
+
+镜像导入后的后续步骤（按顺序）：
+- 修改配置文件：[修改配置](#修改配置)（Docker方式把配置目录挂载到容器，见下方启动命令）
+- 开放防火墙端口：[防火墙和安全组设置](#防火墙和安全组设置)
+- 修改 IM 服务：[修改IM服务](#修改im服务)
+- 启动服务：[启动媒体服务](#启动媒体服务) → "Docker 方式启动"
+
+升级：下载新版本镜像后重新 `sudo docker load -i` 覆盖导入，然后重启容器即可；配置文件在宿主机上（启动时 `-v` 挂载），不会受影响。
+
+### 方式二：免 Docker 自包含运行时部署
+
+不需要安装Docker，也不依赖其他任何软件，适合无法安装Docker的环境。
+
+#### 下载发布包
+x86_64版本在[这里](./wf-janus-linux-x86_64-runtime.tar.gz)；arm64版本在[这里](./wf-janus-linux-aarch64-runtime.tar.gz)
+> 用 `uname -m` 命令查看服务器架构：输出 `x86_64` 选 x86_64 包，输出 `aarch64` 选 arm64 包。
+
+#### 部署步骤
+1. 上传发布包到服务器，解压到```/var/janus```目录（**注意：一定要解压到/var/janus目录里面**）：
+    ```
+    mkdir -p /var/janus && tar xzf wf-janus-linux-x86_64-runtime.tar.gz -C /var/janus
+    ```
+    > arm服务器请使用对应的arm发布包，解压命令同理。
+
+解压完成后，按顺序完成以下通用步骤（配置文件和启动命令的详细说明见各章节）：
+- 修改配置文件：[修改配置](#修改配置)（免Docker方式直接修改 ```/var/janus/janus/etc/janus/``` 下的文件，主要是```janus.transport.mqtt.jcfg```中的```im_host```）
+- 开放防火墙端口：[防火墙和安全组设置](#防火墙和安全组设置)
+- 修改 IM 服务：[修改IM服务](#修改im服务)
+- 启动服务：[启动媒体服务](#启动媒体服务) → "免 Docker 方式启动"
+
+#### 开机自启（可选但推荐）
+发布包内已带systemd服务文件，部署完成后执行：
+```
+sudo cp /var/janus/wf-janus.service /etc/systemd/system/
+sudo vi /etc/systemd/system/wf-janus.service     # 把 DOCKER_IP= 后面改成你的服务器IP
+sudo systemctl daemon-reload
+sudo systemctl enable --now wf-janus
+```
+> 使用systemd自启后，就不要再手动执行```./run-janus.sh```，两者二选一。
+
+#### 升级
+**注意：发布包内包含配置文件，重新解压会覆盖你修改过的配置（如 ```janus.transport.mqtt.jcfg```）。** 升级请按下面步骤，先备份配置再解压：
+
+```
+# 1. 备份已修改的配置到 /var/janus 之外
+sudo cp -r /var/janus/janus/etc/janus /tmp/janus_config_backup
+
+# 2. 用新发布包覆盖解压
+sudo tar xzf 新下载的发布包.tar.gz -C /var/janus
+
+# 3. 恢复你修改过的配置（也可先备份，解压后逐项确认再合并）
+sudo rm -rf /var/janus/janus/etc/janus
+sudo cp -r /tmp/janus_config_backup /var/janus/janus/etc/janus
+
+# 4. 重启服务
+sudo systemctl restart wf-janus   # 或重新执行 ./run-janus.sh
+```
+
+> 如果新版本对配置有新增项，步骤3恢复后需要对照新包的 ```janus/etc/janus/``` 手动补充，或用 diff 合并：
+> ```
+> diff -r /tmp/janus_config_backup /var/janus/janus/etc/janus
+> ```
 
 ## 修改配置
-下载[janus_config](./janus_config)目录到服务器。
+两种部署方式的配置文件内容完全一致，都来自本仓库的[janus_config](./janus_config)目录，仅存放位置不同：
+> Docker方式：配置目录在**宿主机**上（下载本仓库[janus_config](./janus_config)目录到服务器），启动时通过 `-v` 参数挂载到容器内的 ```/var/janus/janus/etc/janus```。
+> 免Docker方式：发布包已内置该配置目录，解压后直接修改 ```/var/janus/janus/etc/janus/``` 下的文件。
+
+无论哪种方式，需要修改的文件和内容如下：
 1. 修改目录下的```janus.transport.mqtt.jcfg```
     ```
     general: {
@@ -71,7 +147,9 @@ IM服务配置文件中修改音视频服务的client_id列表(conference.client
 修改配置后重新启动IM服务。
 
 ## 启动媒体服务
-IM服务启动之后才可以启动媒体服务。请使用下面命令启动：
+IM服务启动之后才可以启动媒体服务。根据部署方式选择对应的启动命令：
+
+### Docker 方式启动
 ```
 sudo docker run -it --privileged=true -e DOCKER_IP=YOUR_PUBLIC_IP(服务器公网IP) --name wf_janus_server --net host -v PATH_TO_janus_config(配置文件目录的绝对路径):/var/janus/janus/etc/janus -v PATH_TO_RECORDS_FOLDER(用来保存会议录制的目录的绝对路径):/opt/janus/share/janus/recordings wildfire_janus
 ```
@@ -81,14 +159,21 @@ sudo docker run -it --privileged=true -e DOCKER_IP=YOUR_PUBLIC_IP(服务器公�
 sudo docker run -it --privileged=true -e DOCKER_IP=46.8.147.195 --name wfc_janus_server --net host -v /Users/userName/wf-janus/config:/var/janus/janus/etc/janus -v /Users/userName/records_folder:/opt/janus/share/janus/recordings wildfire_janus
 ```
 
-上线时需要deamon方式运行，且设置为自动重启。命令如下：
+上线时需要daemon方式运行，且设置为自动重启。命令如下：
 ```
 sudo docker run -d --privileged=true -e DOCKER_IP=YOUR_PUBLIC_IP --name wf_janus_server --net host -v PATH_TO_janus_config:/var/janus/janus/etc/janus -v PATH_TO_RECORDS_FOLDER:/opt/janus/share/janus/recordings --restart=always wildfire_janus
 ```
 
 > --restart=always 一定要设置上，因为当出现不可逆错误时，janus服务会退出，这样自动重启就能恢复。
 > --net host 参数不能遗忘，janus服务需要跟外网通讯，要么host网络，要么做端口映射。建议host网络性能更好更容易。
-> docker 挂载主机目录，请参考 [docker run -v](https://www.cnblogs.com/starfish29/p/10653960.html), [docker volums](https://docs.docker.com/storage/volumes/)
+> docker 挂载主机目录，请参考 [docker run -v](https://www.cnblogs.com/starfish29/p/10653960.html), [docker volumes](https://docs.docker.com/storage/volumes/)
+
+### 免 Docker 方式启动
+```
+cd /var/janus && DOCKER_IP=YOUR_PUBLIC_IP(服务器公网IP) ./run-janus.sh
+```
+> DOCKER_IP为Janus服务所在服务器的外网IP，等价于Docker方式的```--nat-1-1```参数。
+> 如需开机自启，参见上方"方式二：免 Docker 自包含运行时部署"中的systemd配置。
 
 ## 客户端
 确保客户端能够正常运行，能够收发消息；替换音视频高级版的SDK；注意高级版是不需要stun/turn服务，去除掉turn服务的配置。
@@ -130,7 +215,7 @@ conference.record_strategy 1
 ```
 当策略为0时，所有实时音视频都不录制；当策略为1时，所有实时音视频都录制；当策略为2时，客户端发起会议有个是否录制参数，决定是否录制。不支持实时音视频发起后再更改是否录制。
 
-当录制完成后，会保存到janus启动的docker命令指定的目录。录制文件的格式为```mjr```，这种格式是直接把每个流的RTP内容写入文件，这样就不会对服务器造成任何的计算压力。录制的文件是每个用户的每个流独立存储，文件名格式如下：
+当录制完成后，会保存到启动命令中```PATH_TO_RECORDS_FOLDER```（Docker方式）或```rec_dir```配置（免Docker方式）指定的目录。录制文件的格式为```mjr```，这种格式是直接把每个流的RTP内容写入文件，这样就不会对服务器造成任何的计算压力。录制的文件是每个用户的每个流独立存储，文件名格式如下：
 ```
 videoroom-${roomId}-user-${userId}-${timestamp}-[audio/video]-[0-2].mjr
 ```
@@ -143,7 +228,7 @@ janus只能支持这种处理方式，不能录制为常见格式也不能自动
 ./janus-pp-rec  videoroom-${roomId}-user-${userId}-${timestamp}-audio-0.mjr 1.opus
 ./janus-pp-rec  videoroom-${roomId}-user-${userId}-${timestamp}-video-1.mjr 1.mp4
 ```
-再使用ffmepg把音频和视频结合成一个文件:
+再使用ffmpeg把音频和视频结合成一个文件:
 ```
 ffmpeg -i 1.mp4 -i 1.opus -c:v copy -c:a aac call.mp4
 ```
@@ -158,8 +243,8 @@ ffmpeg -i 1.mp4 -i 1.opus -c:v copy -c:a aac call.mp4
 1. 音视频依赖IM作为信令通道的，首先确保通话双方能够互相发送文本消息。
 2. Janus服务器公网IP配置不对，也就是启动命令中的```DOCKER_IP```参数。一定要使用***Janus服务器的公网IP地址***，不能是域名也不能是内网IP，也不能配置为IM服务的地址（分开部署的情况下）。
 3. 没有配置```ice_enforce_list```或者配置错误。请指定为绑定公网IP的网卡。
-4. Janus服务挂掉。当出现严重错误或者IM服务节点变动时，Janus会自动退出，这时需要在docker启动命令中添加```--restart=always```参数，让janus服务自动重启。
-5. Janus没有配置好网络。janus服务需要跟外网通讯，需要启动命令中添加参数```--net host```。
+4. Janus服务挂掉。当出现严重错误或者IM服务节点变动时，Janus会自动退出，需要设置自动重启：Docker方式在启动命令中添加```--restart=always```；免Docker方式使用systemd（```systemctl enable --now wf-janus```），systemd的```Restart=always```会自动拉起服务。
+5. Janus没有配置好网络。janus服务需要跟外网通讯：Docker方式需要启动命令中添加参数```--net host```；免Docker方式直接在宿主机网络运行，天然满足。
 6. 客户端到服务器的连通问题，这时需要检查云服务器的安全组和防火墙是否开放了对应的UDP端口。确认过安全组和防火墙后如果还是无法正常使用，请再按照下面说明检查端口是否是通的。
 7. 移动客户端音视频SDK授权域名不对，请检查客户端配置文件中的***IM host***是不是跟音视频SDK绑定的地址一致。
 8. 配置文件格式问题。配置文件都是Unix格式（LF换行），如果在Windows系统上修改配置文件，有可能变成Windows格式（CRLF换行），导致配置解析不正确。建议在Linux上修改配置文件；或者在Windows上修改后，在Linux上使用命令转换成Unix格式：
@@ -199,6 +284,13 @@ sudo make install
 
 ## 关于野火音视频高级版的一些基础知识
 如果需要更好地二次开发和使用，请详细阅读[野火音视频高级版的一些基础知识](https://docs.wildfirechat.cn/blogs/野火音视频高级版的一些知识.html)，确保您对野火音视频高级版有一定的了解。
+
+## 历史版本
+- 2025.10.11版本：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_5742f701_amd64.tar)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_5742f701_arm64.tar)
+- 如果IM服务是2025.10.11日之前的版本：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_ff1f4f4e.tar)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_ff1f4f4e.tar)
+- 如果IM服务是2024.10.4日之前的版本：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_before_20241004.tar)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_before_20241004.tar)
+- 如果IM服务是2022.7.14日之前的版本：x86_64镜像在[这里](http://static.wildfirechat.cn/wildfire_janus_amd64_before_20220714.tar)；arm64镜像在[这里](http://static.wildfirechat.cn/wildfire_janus_arm64_before_20220714.tar)
+- 如果IM服务是2021.8.4日之前的版本：x86_64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_amd64_legacy.tar)；arm64镜像在[这里](http://static.wildfirechat.net/wildfire_janus_arm64_legacy.tar)
 
 ## 鸣谢
 本产品基于[janus](https://github.com/meetecho/janus-gateway)二次开发而来，十分感谢他们的奉献！
